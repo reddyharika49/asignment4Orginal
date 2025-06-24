@@ -1,38 +1,25 @@
-.App {
-  text-align: center;
+.main_body{
+  /* width: calc(100vw-15vw); */
+  height: calc(100vh - 8vh);
 }
+.main{
+  width: 85%;
+  height: calc(100vh - 8vh);
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
 }
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+.aside{
+   width: 15%;
+   height: calc(100vh - 8vh);
+   background-color: brown;
+ 
 }
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+.student_info{
+  width: 75%;
+  /* height: calc(100vh - 33vh); */
+   /* background-color: skyblue; */
 }
-
-.App-link {
-  color: #61dafb;
-}
-
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.info_content{
+  width:25%;
+  height: calc(100vh - 33vh);
+   background-color: black;
 }
