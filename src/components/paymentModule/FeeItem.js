@@ -63,15 +63,15 @@ const FeeItem = ({ feeItem, index, remove }) => {
           transform: 'translateY(-50%)',
           bgcolor: '#F88',
           borderRadius: '50%',
-          width: 30,
-          height: 30,
+          width: 25,
+          height: 25,
           zIndex: 2
         }}
       >
         <Close sx={{ fontSize: 18 }} />
       </IconButton>
     <Grid container spacing={2}>
-  <Grid item xs={3} sx={{ mt: 2 }}>
+  <Grid item xs={3} sx={{ mt: 2,width:"26%" }}>
     <TextField
       sx={{
         borderRadius: "6px",
@@ -109,7 +109,7 @@ const FeeItem = ({ feeItem, index, remove }) => {
     </Typography>
   </Grid>
 
- <Grid item xs={9} sx={{ mt: 2 }}>
+ <Grid item xs={9} sx={{ mt: 2 ,width:"71.9%"}}>
   <TextField
     sx={{
       borderRadius: "6px",

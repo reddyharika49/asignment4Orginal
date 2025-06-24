@@ -4,7 +4,7 @@ import { Add } from '@mui/icons-material';
 import { Formik, Form, FieldArray } from 'formik';
 import FeeItem from './FeeItem';
 import FeeHeadModal from './FeeHeadModal';
-
+ 
 // Debug check for useRef and useContext
 if (!React.useRef) {
   console.error('React.useRef is not available. Check React import and version.');
@@ -12,7 +12,7 @@ if (!React.useRef) {
 if (!React.useContext) {
   console.error('React.useContext is not available. Check React import and version.');
 }
-
+ 
 const PaymentForm = ({ paymentMode, term, setTerm, amount, handleAmountChange, amountInWords, showModal, setShowModal, selectedDate, setSelectedDate }) => {
   const termOptions = ['term1', 'term2', 'term3'];
   const feeHeads = [
@@ -23,10 +23,10 @@ const PaymentForm = ({ paymentMode, term, setTerm, amount, handleAmountChange, a
     { id: 5, name: "Akash Books Fee" },
     { id: 6, name: "Material Fee" }
   ];
-
+ 
   return (
     <>
-      <Box sx={{ position: 'relative', width: '100%', maxWidth: 1000,mx: '1' }}>
+      <Box sx={{ position: 'relative', mx: '1' }}>
         <Box
           value={term}
           exclusive
@@ -54,7 +54,7 @@ const PaymentForm = ({ paymentMode, term, setTerm, amount, handleAmountChange, a
                 px: 2,
                 py: 0.5,
                 fontWeight: 400,
-                border:"1px solid #BFBFBF",
+                border: "1px solid #BFBFBF",
                 backgroundColor: "white",
                 textTransform: 'capitalize',
                 '&:hover': { bgcolor: 'white' },
@@ -74,35 +74,36 @@ const PaymentForm = ({ paymentMode, term, setTerm, amount, handleAmountChange, a
           border: '1px solid #E6E6E6',
           borderRadius: "12px",
           px: 2,
-          py:4,
-          
-          backgroundColor:"#FAFAFA",
-            height: '110px'
+          py: 4,
+          backgroundColor: "#FAFAFA",
+          height: '110px'
         }}>
-          <Box display="flex" gap={2} flexWrap="wrap" >
+          <Box display="flex" gap={2} flexWrap="wrap">
             <TextField
               label="Enter Amount"
               variant="outlined"
               value={amount}
               type="number"
-             
               onChange={handleAmountChange}
               sx={{
                 width: '220px',
-                borderRadius:"6px",
-                backgroundColor:"#ffff",
-                '& .MuiInputLabel-root': { color: '#404040 !important', fontSize: "12px",
-                      fontWeight:400,
-                      },
+                borderRadius: "6px",
+                backgroundColor: "#ffff",
+                '& .MuiInputLabel-root': {
+                  color: '#404040 !important',
+                  fontSize: "12px",
+                  fontWeight: 400,
+                  transform: 'translate(14px, 12px)',
+                  '&.MuiInputLabel-shrink': {
+                    transform: 'translate(14px, -7px) scale(0.75)',
+                  },
+                },
                 '& .MuiOutlinedInput-root': {
-                   height: '40px',
-                 
-                   '& input': {
-                      padding: '12px 14px',
-                      justifyContent:'center' ,
-                     
-                   
-                    },
+                  height: '40px',
+                  '& input': {
+                    padding: '14px 14px',
+                    justifyContent: 'center',
+                  },
                   '& fieldset': { borderColor: '#7D7D7D !important' },
                   '&:hover fieldset': { borderColor: '#7D7D7D !important' },
                   '&.Mui-focused fieldset': { borderColor: '#7D7D7D !important', borderWidth: '1px !important' },
@@ -114,13 +115,22 @@ const PaymentForm = ({ paymentMode, term, setTerm, amount, handleAmountChange, a
               variant="outlined"
               sx={{
                 flex: 2,
-               borderRadius:"6px",
- backgroundColor:"#ffff",
-                '& .MuiInputLabel-root': { color: '#404040 !important', fontSize: "12px",
-                      fontWeight:400, },
+                borderRadius: "6px",
+                backgroundColor: "#ffff",
+                '& .MuiInputLabel-root': {
+                  color: '#404040 !important',
+                  fontSize: "12px",
+                  fontWeight: 400,
+                  transform: 'translate(14px, 12px)', // Downward position when unfocused
+                },
+                '& .MuiInputLabel-root.Mui-focused': {
+                  transform: 'translate(14px, -7px) scale(0.75)', // Upward position when focused
+                },
+                '& .MuiInputLabel-root.MuiInputLabel-shrink': {
+                  transform: 'translate(14px, -7px) scale(0.75)', // Upward position when shrunk
+                },
                 '& .MuiOutlinedInput-root': {
-                   height: '40px',
-                
+                  height: '40px',
                   '& fieldset': { borderColor: '#7D7D7D !important' },
                   '&:hover fieldset': { borderColor: '#7D7D7D !important' },
                   '&.Mui-focused fieldset': { borderColor: '#7D7D7D !important', borderWidth: '1px !important' },
@@ -153,7 +163,7 @@ const PaymentForm = ({ paymentMode, term, setTerm, amount, handleAmountChange, a
               setFieldValue('feeItems', [...values.feeItems, newItem]);
               setShowModal(false);
             };
-
+ 
             return (
               <Form>
                 <Typography variant="h5" mt={4} mb={2}></Typography>
@@ -178,12 +188,26 @@ const PaymentForm = ({ paymentMode, term, setTerm, amount, handleAmountChange, a
                         label="Cheque Amount"
                         variant="outlined"
                         sx={{
-                          width: '90%',
-                          '& .MuiInputLabel-root': { color: '#404040', '&.Mui-focused': { color: '#404040' } },
+                          width: '80%',
+                          borderRadius: "6px",
+                          gap: '0px',
+                          '& .MuiInputLabel-root': {
+                            color: '#404040',
+                            fontSize: "12px",
+                            fontWeight: 400,
+                            transform: 'translate(14px, 12px)', // Downward position when unfocused
+                          },
+                          '& .MuiInputLabel-root.Mui-focused': {
+                            transform: 'translate(14px, -7px) scale(0.75)', // Upward position when focused
+                          },
+                          '& .MuiInputLabel-root.MuiInputLabel-shrink': {
+                            transform: 'translate(14px, -7px) scale(0.75)', // Upward position when shrunk
+                          },
                           '& .MuiOutlinedInput-root': {
-                            '& fieldset': { borderColor: '#404040' },
-                            '&:hover fieldset': { borderColor: '#404040' },
-                            '&.Mui-focused fieldset': { borderColor: '#404040' },
+                            height: '40px',
+                            '& fieldset': { borderColor: '#7D7D7D' },
+                            '&:hover fieldset': { borderColor: '#7D7D7D' },
+                            '&.Mui-focused fieldset': { borderColor: '#7D7D7D' },
                           },
                         }}
                       />
@@ -191,15 +215,28 @@ const PaymentForm = ({ paymentMode, term, setTerm, amount, handleAmountChange, a
                   )}
                   <div className='col-4'>
                     <TextField
-                      label="Pre print Receipt No"
+                      label="Pre Print Receipt No"
                       variant="outlined"
                       sx={{
                         width: '80%',
-                            borderRadius:"6px",
+                        borderRadius: "6px",
                         gap: '0px',
-                        '& .MuiInputLabel-root': { color: '#404040', '&.Mui-focused': { color: '#404040' } },
+                        '& .MuiInputLabel-root': {
+                          color: '#404040',
+                          fontSize: "12px",
+                          fontWeight: 400,
+                          transform: 'translate(14px, 12px)', // Downward position when unfocused
+                        },
+                        '& .MuiInputLabel-root.Mui-focused': {
+                          transform: 'translate(14px, -7px) scale(0.75)', // Upward position when focused
+                          color: '#404040', // Remove blue color when focused
+                        },
+                        '& .MuiInputLabel-root.MuiInputLabel-shrink': {
+                          transform: 'translate(14px, -7px) scale(0.75)', // Upward position when shrunk
+                          color: '#404040', // Remove blue color when shrunk
+                        },
                         '& .MuiOutlinedInput-root': {
-                          height:'40px',
+                          height: '40px',
                           '& fieldset': { borderColor: '#7D7D7D' },
                           '&:hover fieldset': { borderColor: '#7D7D7D' },
                           '&.Mui-focused fieldset': { borderColor: '#7D7D7D' },
@@ -217,10 +254,10 @@ const PaymentForm = ({ paymentMode, term, setTerm, amount, handleAmountChange, a
                       InputLabelProps={{ shrink: true }}
                       sx={{
                         width: '80%',
-                            borderRadius:"6px",
+                        borderRadius: "6px",
                         '& .MuiInputLabel-root': { color: '#404040', '&.Mui-focused': { color: '#404040' } },
                         '& .MuiOutlinedInput-root': {
-                          height:'40px',
+                          height: '40px',
                           '& fieldset': { borderColor: '#7D7D7D' },
                           '&:hover fieldset': { borderColor: '#7D7D7D' },
                           '&.Mui-focused fieldset': { borderColor: '#7D7D7D' },
@@ -231,7 +268,7 @@ const PaymentForm = ({ paymentMode, term, setTerm, amount, handleAmountChange, a
                 </div>
                 <Button
                   variant="contained"
-                  // startIcon={<Add  sx={{ fontSize: 10 }} />}
+                  // startIcon={<Add sx={{ fontSize: 10 }} />}
                   size="large"
                   color='#00000'
                   onClick={() => setShowModal(true)}
@@ -245,13 +282,13 @@ const PaymentForm = ({ paymentMode, term, setTerm, amount, handleAmountChange, a
                     backgroundColor: "#B6B1FF",
                     fontSize: "12px",
                     fontWeight: 400,
-                       boxShadow: "none", // 👈 No shadow
-    '&:hover': {
-      boxShadow: "none", }
-                    
+                    boxShadow: "none",
+                    '&:hover': {
+                      boxShadow: "none",
+                    }
                   }}
                 >
-                   <Add sx={{ fontSize: 16, mr: 1 }} />
+                  <Add sx={{ fontSize: 16, mr: 1 }} />
                   Add Fee Head
                 </Button>
                 <FeeHeadModal
@@ -271,5 +308,6 @@ const PaymentForm = ({ paymentMode, term, setTerm, amount, handleAmountChange, a
     </>
   );
 };
-
+ 
 export default PaymentForm;
+ 

@@ -9,6 +9,9 @@ const useNavigation=()=>{
     { name: 'Akash Books', path: 'akashbooks' },
     { name: 'Uniform', path: 'uniform' },
     { name: 'Transfers', path: 'transfers' },
+    { name: 'Akash Books', path: 'akashbooks' },
+    { name: 'Uniform', path: 'uniform' },
+    { name: 'Transfers', path: 'transfers' },
   ];
   return{ subTabs
 

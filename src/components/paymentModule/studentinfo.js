@@ -52,7 +52,7 @@ const StudentInfo = () => {
             <div className='ms-1'>
             <h5 style={{ margin: 0,color:"#393939",fontWeight:"700",fontSize:"22px" }}>Payments</h5>
             <p style={{ margin: 0, fontSize: '12px',color:'#575757',fontWeight:"400"}}>
-              Get all student details regarding fee payment, transport, and more...
+             Get All Student Details Regarding Fee Payment, Transport And More...
             </p>
             </div>
           </div>
@@ -63,7 +63,7 @@ const StudentInfo = () => {
   
   size="small"
   sx={{
-    color: '#555555',
+    color: '#252C32',
     borderColor: '#D2D2D2',
     px: "16px",
     py:"px",
@@ -71,7 +71,7 @@ const StudentInfo = () => {
     fontSize: "14px",
     fontWeight: "400",
     borderRadius:"6px",
-    width:"102%",
+    width:"95%",
     height:'75%',
     backgroundColor:'#FBFBFB',
     opacity: 0.7,
@@ -88,78 +88,96 @@ const StudentInfo = () => {
         </div>
       </div>
 
-      {/* Tabs */}
-      <div className='card'>
-      <div style={{ display: 'flex', alignItems: 'center', gap: '4px' ,flexDirection:"row"}}>
-        <div
-          ref={tabContainerRef}
-          className="tabs-scroll"
-          style={{
-            display: 'flex',
-            flexDirection:'row',
-            alignItems:'center',
-            gap:'5px',
-            overflowX: 'auto',
-            scrollBehavior: 'smooth',
-            width: '100%',
-            whiteSpace: 'nowrap',
-            borderBottom:"1px solid #dcdcdc",
-            paddingLeft:"1px",
-            scrollbarWidth: 'none'
-          }}
+      <div className='card' style={{ position: 'relative' }}>
+  <div style={{ display: 'flex', alignItems: 'center', gap: '4px', flexDirection: 'row' }}>
+    
+    {/* Scrollable Tabs */}
+    <div
+      ref={tabContainerRef}
+      className="tabs-scroll"
+      style={{
+        display: 'flex',
+        flexDirection: 'row',
+        alignItems: 'center',
+        gap: '5px',
+        overflowX: 'auto',
+        scrollBehavior: 'smooth',
+        width: '100%',
+        whiteSpace: 'nowrap',
+        borderBottom: '1px solid #dcdcdc',
+        paddingLeft: '1px',
+        scrollbarWidth: 'none',
+      }}
+    >
+      {subTabs.map((tab, index) => (
+        <NavLink
+          key={index}
+          to={tab.path}
+          end
+          style={({ isActive }) => ({
+            color: isActive ? '#3425FF' : 'var(--Dark-Gray-Dark-Gray-2, #252C32)',
+            fontWeight: isActive ? '700' : '400',
+            textDecoration: 'none',
+            padding: '8px 15px',
+            display: 'inline-block',
+            position: 'relative',
+            fontSize: '14px',
+            minWidth: 'fit-content',
+          })}
         >
-          {subTabs.map((tab, index) => (
-            <NavLink
-              key={index}
-              to={tab.path}
-              end
-              style={({ isActive }) => ({
-                color: isActive ? '#3425FF' : 'color: var(--Dark-Gray-Dark-Gray-2, #252C32)',
-                fontWeight: isActive ? '700' : '400',
-                textDecoration: 'none',
-                padding: ' 8px 15px',
-                display: 'inline-block',
-                position: 'relative',
-                fontSize: '14px',
-                minWidth: 'fit-content',
-              })}
-            >
-              {({ isActive }) => (
-                <>
-                  {tab.name}
-                  {isActive && (
-                    <div
-                      style={{
-                        height: '2px',
-                        backgroundColor: '#1E1EFF',
-                        width: '100%',
-                        position: 'absolute',
-                        bottom: 0,
-                        left: 0,
-                        borderRadius: 4,
-                      }}
-                    />
-                  )}
-                </>
+          {({ isActive }) => (
+            <>
+              {tab.name}
+              {isActive && (
+                <div
+                  style={{
+                    height: '1px',
+                    backgroundColor: '#1E1EFF',
+                    width: '100%',
+                    position: 'absolute',
+                    bottom: 0,
+                    left: 0,
+                    borderRadius: 4,
+                  }}
+                />
               )}
-            </NavLink>
-          ))}
-        </div>
-         <div>
-              <IconButton
-          onClick={scrollRight}
-          size="small"
-          sx={{
-            color: 'black',
-            padding:"0px",
-            height: 50,
-            width: 50
-          }}
-        >
-          <ChevronRight />
-        </IconButton>
-          </div>
-      </div>
+            </>
+          )}
+        </NavLink>
+      ))}
+    </div>
+
+    {/* Scroll Button */}
+    <div>
+      <IconButton
+        onClick={scrollRight}
+        size="small"
+        sx={{
+          color: 'black',
+          padding: '0px',
+          height: 40,
+          width: 40,
+        }}
+      >
+        <ChevronRight />
+      </IconButton>
+    </div>
+  </div>
+
+  {/* Fade-out gradient on the right */}
+  <div
+    style={{
+      position: 'absolute',
+      right: 30, // adjust if your scroll button width changes
+      top: 0,
+      bottom: 0,
+      width: '80px',
+      pointerEvents: 'none',
+      background: 'linear-gradient(to right, transparent, white)',
+    }}
+  />
+
+
         <div className="sub-tab-content mt-3  ">
             <Outlet />
           </div>
