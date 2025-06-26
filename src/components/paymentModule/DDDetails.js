@@ -2,12 +2,18 @@ import React from 'react';
 import { Box, FormControl, InputLabel, Select, MenuItem, TextField, Button } from '@mui/material';
 import { ArrowForward } from '@mui/icons-material';
  
-const DDDetails = ({ onBack, onPrint }) => {
-    const [age, setAge] = React.useState('');
+const DDDetails = ({ onBack, onPrint,ddDetails, setDDDetails }) => {
+    // const [age, setAge] = React.useState('');
  
-    const handleChange = (event) => {
-        setAge(event.target.value);
-    };
+    // const handleChange = (event) => {
+    //     setAge(event.target.value);
+    // };
+     const handleChange = (field) => (e) => {
+    setDDDetails((prev) => ({
+      ...prev,
+      [field]: e.target.value,
+    }));
+  };
  
     return (
         <div className="container mt-4">
@@ -72,9 +78,10 @@ const DDDetails = ({ onBack, onPrint }) => {
                                 sx={{ width: "140%" }}
                                 labelId="demo-simple-select-label"
                                 id="demo-simple-select"
-                                value={age}
+                                name='organization'
+                                value={ddDetails.organization||''}
                                 label="Select Organization"
-                                onChange={handleChange}
+                                onChange={handleChange('organization')}
                             >
                                 <MenuItem value={10}>Management</MenuItem>
                                 <MenuItem value={20}>Student</MenuItem>
@@ -116,7 +123,7 @@ const DDDetails = ({ onBack, onPrint }) => {
                             '&:hover fieldset': { borderColor: '#7D7D7D !important' },
                             '&.Mui-focused fieldset': { borderColor: '#7D7D7D !important', borderWidth: '1px !important' },
                         }
-                    }} id="outlined-basic" label="Cheque/DD no" variant="outlined" />
+                    }} id="outlined-basic" label="Cheque/DD no" variant="outlined" value={ddDetails.ddNo || ''} onChange={handleChange('ddNo')} />
                     <TextField sx={{
                         width: "75%",
                         '& .MuiInputLabel-root': {
@@ -139,7 +146,7 @@ const DDDetails = ({ onBack, onPrint }) => {
                             '&:hover fieldset': { borderColor: '#7D7D7D !important' },
                             '&.Mui-focused fieldset': { borderColor: '#7D7D7D !important', borderWidth: '1px !important' },
                         }
-                    }} id="outlined-basic" label="Cheque/DD Date" variant="outlined" />
+                    }} id="outlined-basic" label="Cheque/DD Date" variant="outlined" value={ddDetails.ddDate || ''} onChange={handleChange('ddDate')} />
                 </div>
                 <div className='col-7 mt-3 d-flex justify-content-between' style={{ gap: "10px" }}>
                     <TextField sx={{
@@ -164,7 +171,7 @@ const DDDetails = ({ onBack, onPrint }) => {
                             '&:hover fieldset': { borderColor: '#7D7D7D !important' },
                             '&.Mui-focused fieldset': { borderColor: '#7D7D7D !important', borderWidth: '1px !important' },
                         }
-                    }} id="outlined-basic" label="Bank" variant="outlined" />
+                    }} id="outlined-basic" label="Bank" variant="outlined" value={ddDetails.bank || ''} onChange={handleChange('bank')} />
                     <TextField sx={{
                         width: "75%",
                         '& .MuiInputLabel-root': {
@@ -187,7 +194,7 @@ const DDDetails = ({ onBack, onPrint }) => {
                             '&:hover fieldset': { borderColor: '#7D7D7D !important' },
                             '&.Mui-focused fieldset': { borderColor: '#7D7D7D !important', borderWidth: '1px !important' },
                         }
-                    }} id="outlined-basic" label="Branch" variant="outlined" />
+                    }} id="outlined-basic" label="Branch" variant="outlined" value={ddDetails.branch || ''} onChange={handleChange('branch')} />
                 </div>
                 <div className='col-7 mt-3 mb-5 d-flex justify-content-between' style={{ gap: "10px" }}>
                     <TextField sx={{
@@ -212,7 +219,7 @@ const DDDetails = ({ onBack, onPrint }) => {
                             '&:hover fieldset': { borderColor: '#7D7D7D !important' },
                             '&.Mui-focused fieldset': { borderColor: '#7D7D7D !important', borderWidth: '1px !important' },
                         }
-                    }} id="outlined-basic" label="City Name" variant="outlined" />
+                    }} id="outlined-basic" label="City Name" variant="outlined" value={ddDetails.city || ''} onChange={handleChange('city')} />
                     <TextField sx={{
                         width: "75%",
                         '& .MuiInputLabel-root': {
@@ -235,7 +242,7 @@ const DDDetails = ({ onBack, onPrint }) => {
                             '&:hover fieldset': { borderColor: '#7D7D7D !important' },
                             '&.Mui-focused fieldset': { borderColor: '#7D7D7D !important', borderWidth: '1px !important' },
                         }
-                    }} id="outlined-basic" label="IFSC Code" variant="outlined" />
+                    }} id="outlined-basic" label="IFSC Code" variant="outlined"  value={ddDetails.ifsc || ''} onChange={handleChange('ifsc')}/>
                 </div>
             </div>
             <Box mt={4} display="flex" justifyContent="center">

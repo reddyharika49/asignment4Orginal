@@ -12,6 +12,7 @@ const Payments = () => {
   const [term, setTerm] = useState("term1");
   const [amount, setAmount] = useState("");
    const [receiptNo, setreceiptNo] = useState("");
+  const [chequeAmount, setchequeAmount] = useState("");
   const [amountInWords, setAmountInWords] = useState("");
   const [showModal, setShowModal] = useState(false);
   const [selectedDate, setSelectedDate] = useState("");
@@ -29,6 +30,15 @@ const Payments = () => {
     { id: 5, name: "Akash Books Fee" },
     { id: 6, name: "Material Fee" },
   ];
+  const [ddDetails, setDDDetails] = useState({
+  organization: "",
+  ddNo: "",
+  ddDate: "",
+  bank: "",
+  branch: "",
+  city: "",
+  ifsc: "",
+});
 
   const handlePaymentModeChange = (mode) => {
     setPaymentMode(mode);
@@ -53,6 +63,10 @@ const Payments = () => {
     const value = e.target.value;
     setreceiptNo(value);
   };
+     const handleChequeAmountChange = (e) => {
+    const value = e.target.value;
+    setchequeAmount(value);
+  };
 
 const addFeeItem = (feeHead) => {
   const alreadyExists = feeItems.some(item => item.id === feeHead.id);
@@ -71,45 +85,43 @@ const addFeeItem = (feeHead) => {
 };
 
 
-  const handlePrintReceipt = useCallback(async () => {
-    // Collect data from Payments
-    const paymentData = {
-      paymentMode,
-      term,
-      amount,
-      receiptNo,
-      selectedDate,
-      feeItems,
-    };
+ const handlePrintReceipt = useCallback(async () => {
+  const paymentData = {
+    paymentMode,
+    term,
+    amount,
+    receiptNo,
+    selectedDate,
+    feeItems,
+    chequeAmount
+  };
 
-    // Collect data from PaymentForm if callback is set
-    if (formDataCallback) {
-      const formData = await formDataCallback();
-      Object.assign(paymentData, formData);
-    }
+  if (paymentMode === "DD") {
+    Object.assign(paymentData, ddDetails);
+  }
 
-    // Send data to backend
-    try {
-      const response = await fetch("/api/receipt", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(paymentData),
-      });
+  if (formDataCallback) {
+    const formData = await formDataCallback();
+    Object.assign(paymentData, formData);
+  }
 
-      if (!response.ok) {
-        throw new Error("Failed to send receipt data");
-      }
+  try {
+    const response = await fetch("/api/receipt", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(paymentData),
+    });
 
-      const result = await response.json();
-      console.log("Receipt sent successfully:", result);
-      // Optionally, show success message or reset form
-    } catch (error) {
-      console.error("Error sending receipt:", error);
-      // Optionally, show error message to user
-    }
-  }, [paymentMode, term, amount, selectedDate, feeItems, formDataCallback]);
+    if (!response.ok) throw new Error("Failed to send receipt data");
+
+    const result = await response.json();
+    console.log("Receipt sent successfully:", result);
+  } catch (error) {
+    console.error("Error sending receipt:", error);
+  }
+}, [paymentMode, term, amount, receiptNo, selectedDate, feeItems, chequeAmount, ddDetails, formDataCallback]);
 
   return (
     <div
@@ -249,6 +261,7 @@ const addFeeItem = (feeHead) => {
               amount={amount}
               handleAmountChange={handleAmountChange}
               handleReceiptChange={handleReceiptChange}
+              handleChequeAmountChange={handleChequeAmountChange}
               amountInWords={amountInWords}
               showModal={showModal}
               setShowModal={setShowModal}
@@ -258,33 +271,36 @@ const addFeeItem = (feeHead) => {
               setFormDataCallback={setFormDataCallback}
             />
           )}
-          {showDDDetails ? (
-            <DDDetails
-              onBack={() => {
-                setShowDDDetails(false);
-                setProgress(50);
-                setStep("Step 1");
-              }}
-              onPrint={() => setProgress(100)}
-            />
-          ) : (
-            paymentMode === "DD" && (
-              <Box textAlign="center" mt={5}>
-                <Button
-                  variant="contained"
-                  sx={{ backgroundColor: "#3425FF", textTransform: "capitalize" }}
-                  endIcon={<ArrowForward />}
-                  onClick={() => {
-                    setShowDDDetails(true);
-                    setProgress(100);
-                    setStep("Step 2");
-                  }}
-                >
-                  Proceed
-                </Button>
-              </Box>
-            )
-          )}
+{showDDDetails ? (
+  <DDDetails
+    onBack={() => {
+      setShowDDDetails(false);
+      setProgress(50);
+      setStep("Step 1");
+    }}
+    onPrint={handlePrintReceipt}
+    ddDetails={ddDetails}
+    setDDDetails={setDDDetails}
+  />
+) : (
+  paymentMode === "DD" && (
+    <Box textAlign="center" mt={5}>
+      <Button
+        variant="contained"
+        sx={{ backgroundColor: "#3425FF", textTransform: "capitalize" }}
+        endIcon={<ArrowForward />}
+        onClick={() => {
+          setShowDDDetails(true);
+          setProgress(100);
+          setStep("Step 2");
+        }}
+      >
+        Proceed
+      </Button>
+    </Box>
+  )
+)}
+
           {paymentMode !== "DD" && !showDDDetails && (
             <Box textAlign="center" mt={5}>
               <Button

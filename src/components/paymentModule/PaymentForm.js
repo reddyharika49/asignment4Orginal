@@ -16,6 +16,7 @@ const PaymentForm = ({
   setTerm,
   handleAmountChange,
   handleReceiptChange,
+  handleChequeAmountChange,
   amountInWords,
   setShowModal,
   selectedDate,
@@ -217,8 +218,11 @@ const PaymentForm = ({
               {paymentMode !== "Cash" && (
                 <div className="col-4">
                   <TextField
+                  name="ChequeAmount"
                     label="Cheque Amount"
                     variant="outlined"
+                    value={values.ChequeAmount}
+                    onChange={(e)=>handleChequeAmountChange(e)}
                     sx={{
                       width: "80%",
                       borderRadius: "6px",
