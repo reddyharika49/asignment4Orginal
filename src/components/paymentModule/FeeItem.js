@@ -73,32 +73,55 @@ const FeeItem = ({ feeItem, index, remove }) => {
     <Grid container spacing={2}>
   <Grid item xs={3} sx={{ mt: 2,width:"26%" }}>
     <TextField
-      sx={{
-        borderRadius: "6px",
-        '& .MuiInputLabel-root': {
-          color: '#404040 !important',
-          fontSize: "12px",
-          fontWeight: 400,
+  sx={{
+    borderRadius: "6px",
+    '& .MuiInputLabel-root': {
+      color: '#404040 !important',
+      fontSize: "12px",
+      fontWeight: 400,
+    },
+    '& .MuiOutlinedInput-root': {
+      '& fieldset': { borderColor: '#7D7D7D !important' },
+      '&:hover fieldset': { borderColor: '#7D7D7D !important' },
+      '&.Mui-focused fieldset': {
+        borderColor: '#7D7D7D !important',
+        borderWidth: '1px !important',
+      },
+      '& input': {
+        // Hide spin buttons in Chrome, Safari, Edge
+        '&::-webkit-outer-spin-button': {
+          WebkitAppearance: 'none',
+          margin: 0,
         },
-        '& .MuiOutlinedInput-root': {
-          '& fieldset': { borderColor: '#7D7D7D !important' },
-          '&:hover fieldset': { borderColor: '#7D7D7D !important' },
-          '&.Mui-focused fieldset': {
-            borderColor: '#7D7D7D !important',
-            borderWidth: '1px !important',
-          },
+        '&::-webkit-inner-spin-button': {
+          WebkitAppearance: 'none',
+          margin: 0,
         },
-      }}
-      label="Enter Amount"
-      fullWidth
-      variant="outlined"
-      size="small"
-      type="number"
-      name={`feeItems[${index}].amount`}
-      value={amount}
-      onChange={handleChange}
-      onBlur={handleBlur}
-    />
+        // For Firefox
+        MozAppearance: 'textfield',
+      },
+    },
+  }}
+  label="Enter Amount"
+  fullWidth
+  variant="outlined"
+  size="small"
+  type="number"
+  name={`feeItems[${index}].amount`}
+  value={ values.feeItems?.[index]?.amount || ''}
+  onChange={handleChange}
+  onBlur={handleBlur}
+  onKeyDown={(e) => {
+    if (e.key === 'ArrowUp' || e.key === 'ArrowDown') {
+      e.preventDefault();
+    }
+  }}
+  inputProps={{
+    onWheel: (e) => e.target.blur(),
+    inputMode: 'numeric',
+  }}
+/>
+
     <Typography
       variant="caption"
       sx={{ mt: 1, display: 'block', color: amount ? 'green' : 'orangered' }}
@@ -109,7 +132,8 @@ const FeeItem = ({ feeItem, index, remove }) => {
     </Typography>
   </Grid>
 
- <Grid item xs={9} sx={{ mt: 2 ,width:"71.9%"}}>
+
+<Grid item xs={9} sx={{ mt: 2, width: "71.9%" }}>
   <TextField
     sx={{
       borderRadius: "6px",
@@ -132,11 +156,12 @@ const FeeItem = ({ feeItem, index, remove }) => {
     variant="outlined"
     size="small"
     name={`feeItems[${index}].description`}
-    value={""}
+    value={values.feeItems?.[index]?.description || ""}
     onChange={handleChange}
     onBlur={handleBlur}
   />
 </Grid>
+
 
 </Grid>
     </Box>

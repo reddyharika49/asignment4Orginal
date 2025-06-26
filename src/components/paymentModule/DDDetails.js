@@ -239,7 +239,7 @@ const DDDetails = ({ onBack, onPrint }) => {
                 </div>
             </div>
             <Box mt={4} display="flex" justifyContent="center">
-                <Button variant="contained" endIcon={<ArrowForward />} onClick={onPrint}>
+                <Button variant="contained" sx={{backgroundColor:"#3425FF"}} endIcon={<ArrowForward />} onClick={onPrint}>
                     Print Receipt
                 </Button>
             </Box>

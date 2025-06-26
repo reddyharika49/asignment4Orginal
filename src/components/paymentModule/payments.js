@@ -1,25 +1,26 @@
-import React, { useState } from "react";
+import React, { useState, useCallback } from "react";
 import { Box, Button, LinearProgress, Typography } from "@mui/material";
 import { ArrowForward } from "@mui/icons-material";
 import DDDetails from "./DDDetails";
 import PaymentForm from "./PaymentForm";
-import FeeHeadModal from "./FeeHeadModal"; // Import FeeHeadModal
+import FeeHeadModal from "./FeeHeadModal";
 import { toWords } from "number-to-words";
-import blur from "../../asserts/blur.png"
- const Payments = () => {
+import blur from "../../asserts/blur.png";
+
+const Payments = () => {
   const [paymentMode, setPaymentMode] = useState("Cash");
   const [term, setTerm] = useState("term1");
   const [amount, setAmount] = useState("");
+   const [receiptNo, setreceiptNo] = useState("");
   const [amountInWords, setAmountInWords] = useState("");
   const [showModal, setShowModal] = useState(false);
   const [selectedDate, setSelectedDate] = useState("");
   const [showDDDetails, setShowDDDetails] = useState(false);
   const [progress, setProgress] = useState(0);
   const [step, setStep] = useState("Step 1");
-  // State for feeItems to support FeeHeadModal
   const [feeItems, setFeeItems] = useState([]);
+  const [formDataCallback, setFormDataCallback] = useState(null);
 
-  // Define feeHeads (moved from PaymentForm)
   const feeHeads = [
     { id: 1, name: "Pocket Money" },
     { id: 2, name: "Transport Fee" },
@@ -48,18 +49,67 @@ import blur from "../../asserts/blur.png"
     const number = parseInt(value.replace(/[^0-9]/g, ""), 10);
     setAmountInWords(!isNaN(number) ? toWords(number) : "");
   };
+   const handleReceiptChange = (e) => {
+    const value = e.target.value;
+    setreceiptNo(value);
+  };
 
-  // Function to add a fee item (moved from PaymentForm)
-  const addFeeItem = (feeHead) => {
+const addFeeItem = (feeHead) => {
+  const alreadyExists = feeItems.some(item => item.id === feeHead.id);
+
+  if (!alreadyExists) {
     const newItem = {
       id: feeHead.id,
       name: feeHead.name,
       amount: "",
       description: `Payment for ${feeHead.name}`,
     };
-    setFeeItems([...feeItems, newItem]);
-    setShowModal(false);
-  };
+    setFeeItems(prev => [...prev, newItem]);
+  }
+
+  setShowModal(false); // Always close the modal after click
+};
+
+
+  const handlePrintReceipt = useCallback(async () => {
+    // Collect data from Payments
+    const paymentData = {
+      paymentMode,
+      term,
+      amount,
+      receiptNo,
+      selectedDate,
+      feeItems,
+    };
+
+    // Collect data from PaymentForm if callback is set
+    if (formDataCallback) {
+      const formData = await formDataCallback();
+      Object.assign(paymentData, formData);
+    }
+
+    // Send data to backend
+    try {
+      const response = await fetch("/api/receipt", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(paymentData),
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to send receipt data");
+      }
+
+      const result = await response.json();
+      console.log("Receipt sent successfully:", result);
+      // Optionally, show success message or reset form
+    } catch (error) {
+      console.error("Error sending receipt:", error);
+      // Optionally, show error message to user
+    }
+  }, [paymentMode, term, amount, selectedDate, feeItems, formDataCallback]);
 
   return (
     <div
@@ -73,7 +123,6 @@ import blur from "../../asserts/blur.png"
         paddingTop: "0px",
       }}
     >
-      {/* Blur Backdrop */}
       {showModal && (
         <Box
           sx={{
@@ -82,18 +131,16 @@ import blur from "../../asserts/blur.png"
             left: 0,
             width: "100%",
             height: "100%",
-            backgroundImage:`url(${blur})`,
-            backgroundSize:"cover",
-           
+            backgroundImage: `url(${blur})`,
+            backgroundSize: "cover",
             zIndex: 10,
             borderRadius: 1,
             overflow: "hidden",
-            opacity:'50%'
+            opacity: "50%",
           }}
         />
       )}
 
-      {/* Render FeeHeadModal */}
       <FeeHeadModal
         showModal={showModal}
         setShowModal={setShowModal}
@@ -101,7 +148,6 @@ import blur from "../../asserts/blur.png"
         addFeeItem={addFeeItem}
       />
 
-      {/* Conditionally Render Payments Content */}
       {!showModal && (
         <>
           <div className="payments_top d-flex justify-content-between">
@@ -118,7 +164,6 @@ import blur from "../../asserts/blur.png"
                   borderRadius: "5px",
                   fontSize: "18px",
                   fontWeight: "600",
-
                 }}
               >
                 46,000
@@ -203,12 +248,14 @@ import blur from "../../asserts/blur.png"
               setTerm={setTerm}
               amount={amount}
               handleAmountChange={handleAmountChange}
+              handleReceiptChange={handleReceiptChange}
               amountInWords={amountInWords}
               showModal={showModal}
               setShowModal={setShowModal}
               selectedDate={selectedDate}
               setSelectedDate={setSelectedDate}
-              feeItems={feeItems} // Pass feeItems to PaymentForm
+              feeItems={feeItems}
+              setFormDataCallback={setFormDataCallback}
             />
           )}
           {showDDDetails ? (
@@ -254,6 +301,7 @@ import blur from "../../asserts/blur.png"
                     boxShadow: "none",
                   },
                 }}
+                onClick={handlePrintReceipt}
               >
                 Print Receipt
               </Button>
